@@ -1,32 +1,17 @@
 #include <iostream>
-#include <string>
-#include <stack>
 #include <vector>
-using namespace std;
+#include <memory>
+#include <string>
 
 int main() {
-  string s;
-  cin >> s;
-  
-  auto it = s.begin();
-  vector<int> numbers;
-  while (it != s.end()) {
-    string num;
-    while (*it <= '9' && *it >= '0') {
-      num.push_back(*it);
-      it = s.erase(it);
-    }
-    numbers.push_back(stoi(num));
-    ++it;
-  }
-
-  vector<char> comrs;
-  vector<int> pos;
-  it = s.begin();
-  
-  
-
-
-
+  std::string s = "Hello";
+  std::shared_ptr<std::string> p = std::make_shared<std::string>();
+  int i = 9;
+  if (p)
+    std::cout << "true ";
+  if (p && p->empty())
+    *p = "Hi";
+  std::cout << &p << "\n"
+            << *p << "\n";
   return 0;
 }
