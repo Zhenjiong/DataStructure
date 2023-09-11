@@ -10,6 +10,8 @@
 
 虚函数
 
+正则表达式
+
 
 
 ## The First Volume: Review of C++
@@ -259,5 +261,9 @@ virtual bool empty() const = 0;
 **对于基类，一定要定义一个virtual析构函数！！！**
 
 **多态性质的基类应该设计一个virtual析构。一个class带有任何virtual函数的时候就应该定义一个virtual析构**
+
+### 正则表达式
+
+
 
 ### 性能分析
