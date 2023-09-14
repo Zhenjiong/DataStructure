@@ -12,6 +12,14 @@
 
 正则表达式
 
+windows编译 动态链接和静态链接
+
+extern "C"
+
+__cplusplus
+
+
+
 
 
 ## The First Volume: Review of C++
