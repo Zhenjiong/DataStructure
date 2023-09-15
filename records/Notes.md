@@ -274,4 +274,20 @@ virtual bool empty() const = 0;
 
 
 
+## The Annotated STL Sources(stl源码剖析)
+
+## Container
+
+### 顺序容器
+
+forward_list 和 array是c++11新增类型
+
+支持快速随机访问：array, vector, deque, string
+
+适合在中间插入元素：list, forward_list
+
+既要随机访问又要中间插入元素，就要平衡上述四种容器了
+
+连续内存空间：array, vector, string
+
 ### 性能分析
