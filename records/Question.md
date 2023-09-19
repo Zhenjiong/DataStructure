@@ -7,7 +7,10 @@
 
 ## 荣耀20230909 笔试
 
+
 第三题 走格子。
+
+[Answer](#20230909-exam-3rd)
 
 N*N的矩阵格子，-1表示障碍物，1表示怪兽格子，0表示空
 
@@ -22,6 +25,8 @@ N*N的矩阵格子，-1表示障碍物，1表示怪兽格子，0表示空
 问最多消灭多少怪兽
 
 第二题 展开字符串
+
+[Answer](#20230909-exam-2nd)
 
 输入 abas3(adf)
 
@@ -75,6 +80,11 @@ n个整数表示愤怒值
 
 求圆能在三角形内的圆心的概率
 
+
+
+
+
+
 ## Practice
 
 ### 二分查找
@@ -82,3 +92,122 @@ n个整数表示愤怒值
 ### 反转链表
 
 ### 正则匹配
+
+
+
+
+## Answers
+
+### 20230909 exam 2nd
+
+```c++
+#include <iostream>
+#include <string>
+#include <stack>
+#include <vector>
+
+// // right < left
+// struct Range{
+//   char commr;
+//   int left;
+//   int right;
+//   int new_pos;
+//   Range(char _commr, int _left, int _right, int _newpos)
+//     : commr(_commr), left(_left), right(_right), new_pos(_newpos) {};
+// };
+
+int main () {
+
+  std::string input = "adsd10(ab3(ji)a)";
+
+  int n = input.size();
+  int cur = n-1;
+  std::stack<int> ranges;
+  std::string res;
+  while (cur >= 0) {
+    if (input[cur] == ')') {
+      ranges.push(res.size());
+    }
+    else if (input[cur] == '(') {
+      // int left_comm = cur;
+      auto temp = ranges.top();
+      ranges.pop();
+
+      std::vector<int> nums;
+      do {
+        --cur;
+        nums.push_back(input[cur] - '0');
+      } while (cur > 0 && input[cur-1] <= '9' && input[cur-1] >= '0');
+      int counter = 0;
+      for (auto it = nums.rbegin(); it != nums.rend(); ++it)
+        counter = 10 * counter + *it;
+      
+      std::string tt(res.begin()+temp, res.end());
+      for (int i = 1; i < counter; ++i)
+        res += tt;
+    }
+    else {
+      res.push_back(input[cur]);
+    }
+    
+    --cur;
+  }
+
+  std::cout << res << std::endl;
+  return 0;
+}
+```
+
+### 20230909 exam 3rd
+
+```c++
+#include <iostream>
+#include <unordered_set>
+#include <vector>
+
+class Solution {
+ public:
+  std::vector<std::vector<int> > grid;
+  std::unordered_set<int> dead_monsters;
+  int n;
+
+  Solution(std::vector<std::vector<int> > &input, int _n)
+    : n(_n), grid(input), dead_monsters() {
+    dfs(0,0);
+    std::cout << dead_monsters.size() << std::endl;
+  }
+
+  bool dfs(int x, int y);
+
+};
+
+int main() {
+  int n = 5;
+  std::vector<std::vector<int> > grid(n);
+  grid[0] = std::vector<int>({0,0,0,1,1});
+  grid[1] = std::vector<int>({0,0,-1,-1,0});
+  grid[2] = std::vector<int>({0,-1,0,1,0});
+  grid[3] = std::vector<int>({0,1,1,0,-1});
+  grid[4] = std::vector<int>({0,0,1,1,0});
+  
+  Solution(grid, n);
+  std::cout << "Hello World!" << std::endl;
+  return 0;
+}
+
+bool Solution::dfs(int x, int y) {
+  if (x < 0 || x > n-1 || y < 0 || y > n-1 || this->grid[x][y] == -1)
+    return false;
+  if (x == n-1 && y == n-1) return true;
+  bool next_row = dfs(x+1,y);
+  bool next_col = dfs(x,y+1);
+  if (next_row || next_col) {
+    if (this->grid[x][y] == 1)
+      this->dead_monsters.insert(x*n+y);
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+```
