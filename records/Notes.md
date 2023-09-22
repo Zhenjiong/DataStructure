@@ -138,6 +138,11 @@ int *const p = &i;
 
 在函数的参数传递的过程中，用实参初始化形参时会忽略掉顶层const：
 
+```c++
+void fcn(const int i) { /* fcn 能读取i，常量和非常量版本都行，但是不能向i写值*/}
+void fcn(int i) {}  // 错误：重复定义了fcn(int). 因为会忽略顶层const
+```
+
 ```C++
 void fcn(const int i)  { /* fcn能够读取i,但不能向i写值 */}
 void fcn(int i)  { /* */ }  //错误：重复定义了fcn(int)
