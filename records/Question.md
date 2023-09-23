@@ -152,6 +152,134 @@ m行n列 矩阵为0或1 从第一列的任意一个1，通过上下左右沿着1
 
 对一个链表进行排序，时间复杂度为Nlog(N)
 
+空间logN的自顶向下递归归并：
+
+```c++
+    ListNode* sortList(ListNode* head) {
+        if (head == nullptr) return nullptr;
+        if (head->next == nullptr) return head;
+        return sort(head, nullptr);
+    }
+
+    ListNode* sort(ListNode* begin, ListNode* end) {
+        // if (begin == nullptr) return begin;
+        if (begin == end) return begin;
+        if (begin->next == end) {
+            begin->next = nullptr;
+            return begin;
+        }
+
+        ListNode* mid = begin;
+        ListNode* right = begin->next;
+        while (right != end) {
+            right = right->next;
+            mid = mid->next;
+            if (right != end)
+                right = right->next;
+        }
+
+        return merge(sort(begin, mid), sort(mid, end));
+    }
+
+    ListNode* merge(ListNode* list1, ListNode* list2) {
+        if (list1 == nullptr) return list2;
+        if (list2 == nullptr) return list1;
+
+        ListNode* dum = new ListNode(-1);
+        ListNode* tail = dum;
+        while (list1 != nullptr && list2 != nullptr) {
+            if (list1->val < list2->val) {
+                tail->next = list1;
+                list1 = list1->next;
+            }
+            else {
+                tail->next = list2;
+                list2 = list2->next;
+            }
+            tail = tail->next;
+        }
+        if (list1 == nullptr && list2 != nullptr)
+            tail->next = list2;
+        if (list2 == nullptr && list1 != nullptr)
+            tail->next = list1;
+        return dum->next;
+    }
+```
+
+空间为常数的：
+
+
+
+```c++
+    ListNode* sortList(ListNode* head) {
+        if (head == nullptr) return nullptr;
+        if (head->next == nullptr) return head;
+        int length = 0;
+        ListNode* temp = head;
+        while (temp != nullptr) {
+            temp = temp->next;
+            ++length;
+        }
+
+        ListNode* dum = new ListNode(-1);
+        dum->next = head;
+        for (int subLength = 1; subLength < length; subLength <<= 1) {
+            ListNode* pre = dum;
+            ListNode* cur = dum->next;
+            while (cur != nullptr) {
+                ListNode* head1 = cur;
+                for (int i=1; i<subLength && cur->next != nullptr; ++i) {
+                    cur = cur->next;
+                }
+                ListNode* head2 = cur->next;
+                cur->next = nullptr;
+                cur = head2;
+                for (int j = 1; j < subLength && cur != nullptr; ++j) {
+                    cur = cur->next;
+                }
+                ListNode* temp = nullptr;
+                if (cur != nullptr) {
+                    temp = cur->next;
+                    cur->next = nullptr;
+                }
+                cur = temp;
+
+                ListNode* m = merge(head1, head2);
+                pre->next = m;
+                while (pre->next != nullptr)
+                    pre = pre->next;
+                pre->next = cur;
+            }
+        }
+        return dum->next;
+    }
+
+    ListNode* merge(ListNode* list1, ListNode* list2) {
+        if (list1 == nullptr) return list2;
+        if (list2 == nullptr) return list1;
+
+        ListNode* dum = new ListNode(-1);
+        ListNode* tail = dum;
+        while (list1 != nullptr && list2 != nullptr) {
+            if (list1->val < list2->val) {
+                tail->next = list1;
+                list1 = list1->next;
+            }
+            else {
+                tail->next = list2;
+                list2 = list2->next;
+            }
+            tail = tail->next;
+        }
+        if (list1 == nullptr && list2 != nullptr)
+            tail->next = list2;
+        if (list2 == nullptr && list1 != nullptr)
+            tail->next = list1;
+        return dum->next;
+    }
+```
+
+
 ### 二分查找
 
 ### 反转链表
@@ -318,7 +446,7 @@ class Solution {
       if (!kk) std::cout << -1;
     }
     // // Plan one: DFS, recursion
-    // // ---------------------------------------------------------------------
+    // // ----------------------------------------------------------------
     // else {
     //   for (int i = 0; i < m; ++i)
     //     dfs(i,0,std::vector<int>());
@@ -328,9 +456,9 @@ class Solution {
     //     std::cout << *std::min_element(res.begin(), res.end());
     //   }
     // }
-    // ========================================================================
+    // ===================================================================
     // Plan two: BFS, non-recursion
-    // ------------------------------------------------------------------------
+    // -------------------------------------------------------------------
     else {
       for (int i = 0; i < m; ++i) {
 
