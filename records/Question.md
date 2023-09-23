@@ -142,6 +142,67 @@ m行n列 矩阵为0或1 从第一列的任意一个1，通过上下左右沿着1
 
 第三题 词法分析器
 
+## 小米20230923 笔试
+
+第一题 基站信号强度
+
+第二题 拓扑排序
+
+2
+1:0,0:1
+
+错误的解答
+
+TODO
+
+```c++
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+
+int main () {
+  // int n;
+  // cin >> n;
+  // string s;
+  // cin >> s;
+
+  int n = 2;
+  string s = "1:0,0:1";
+  int counter = 0;
+  for (int i = 0; i < s.size(); ++i) {
+    if (s[i] == ':') {
+      int left = i;
+      int right = i;
+      do
+      {
+        --left;
+      } while (left >=0 && s[left] >= '0' && s[left] <= '9');
+      do
+      {
+        ++right;
+      } while (right < n && s[right] >= '0' && s[right] <= '9');
+      string ll = s.substr(left+1, i - left - 1);
+      string rr = s.substr(i+1, right - i);
+      int l = stoi(ll);
+      int r = stoi(rr);
+      if (l < r) {
+        cout << 0;
+        break;
+      }
+    }
+
+    ++counter;
+  }
+  if (counter == n)
+    cout << 1;
+  
+
+  return 0;
+}
+```
 
 
 ## Practice
