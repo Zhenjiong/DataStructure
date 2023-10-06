@@ -40,7 +40,19 @@ TODO
 
 #### 左值与右值
 
+#### struct 与 class
 
+他们只有两个区别：
+
+1 默认的访问权限不同。struct默认都是public成员，class默认是private成员
+
+2 默认的继承派生访问符不同。struct默认public继承，class默认private继承
+
+```c++
+class Base {};
+struct D1 : Base {};  // 默认public继承
+class D2 : Base {};   // 默认private继承
+```
 
 #### OOP:多态和继承
 
