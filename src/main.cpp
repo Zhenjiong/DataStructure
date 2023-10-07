@@ -1,59 +1,35 @@
 #include <iostream>
 
-class A {
- public:
-  virtual void out() const{
+struct C {
+  int c;
+  int c2;
+};
+struct A {
+
+  virtual void print() {
     std::cout << "A" << std::endl;
   }
 
-  int aa;
+  virtual void get() {
+    std::cout << a << std::endl;
+  }
 
+  int a;
+  int a3;
 };
 
-class B {
- public:
-  // virtual void out() const override {
-  //   std::cout << "B" << std::endl;
-  // }
-  void out() const;
-  void out();
-  int bb;
+struct B : A {
+  int b;
 };
 
-void B::out() const {
-  std::cout << "const B" << std::endl;
-}
-
-void B::out() {
-  std::cout << "no-const B" << std::endl;
-}
-
-void test(A &a) {
-  a.out();
-}
-
-void test_b(const B &b) {
-  b.out();
-}
-
-void test_c(const B b) {
-  b.out();
-}
-
-int main() {
-  A a;
-  B b;
-  b.out();
-  const B* cb = &b;
-  cb->out();
-  test_b(b);
-  test_c(b);
-  // test(b);
-
-  int cc = 4;
-  int &const c = cc;
-  c = 5;
-  std::cout << cc;
-  
+int main () {
+  B bb;
+  bb.b = 10;
+  A *pA = &bb;
+  B *pB = dynamic_cast<B*>(pA);
+  std::cout << pB->b << std::endl;
+  std::cout << sizeof(B) << std::endl;
+  C sc{1};
+  std::cout << sc.c2 << " " << sc.c << std::endl;
   return 0;
 }
