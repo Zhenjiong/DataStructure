@@ -5,6 +5,12 @@
 
 二叉树的操作
 
+git
+
+new delete 与 c中的 malloc
+
+友元
+
 ## 八股文
 
 ### 1.语言基础
@@ -66,6 +72,10 @@ polymorphism多态，可以使得在执行同一条语句时，能够根据运�
 虚函数(virtual function) 允许了派生类定义其各自版本的该函数
 
 TODO
+
+#### 访问控制: public private protected
+
+
 
 ## 荣耀20230909 笔试
 
