@@ -1,60 +1,34 @@
 #include <iostream>
+#include <memory>
+#include <vector>
 
 using namespace std;
 
-class CBase {
-public:
-  CBase() {
-    Init();
-  }
+struct A {
+  int a;
 
-  virtual ~CBase() {
-    Uninit();
-  };
+  A(const A &) = delete;
 
-  virtual void Init() {
-    Fun();
-  }
+	A(A &&) = default;
 
-  virtual void Uninit() {
-    cout << "CBase::Uninit" << endl;
-  }
+	A &operator=(const A &other) noexcept = delete;
 
-  virtual void Fun() {
-    cout << "CBase::Fun" << endl;
-  }
-
-  int base_value = 0x1234;
+	A &operator=(A &&other) noexcept = delete;
 };
 
-class CDerived : public CBase {
-public:
-  CDerived() {
-    Init();
-  }
+int main () {
+  
+  vector<A> data;
+  data.push_back(A{10});
+  data.push_back(A{30});
 
-  virtual ~CDerived() {
-    Uninit();
-  }
+  auto data2(std::move(data));
 
-  virtual void Init() {
-    cout << "CDerived::Init" << endl;
-  }
+  vector<unique_ptr<int> > x;
+  x.push_back(make_unique<int>(10));
+  x.push_back(make_unique<int>(50));
 
-  virtual void Uninit() {
-    cout << "CDerived::Uninit" << endl;
-  }
+  auto y(std::move(x));
 
-  virtual void Fun() {
-    cout << "CDerived::Fun" << endl;
-  }
-
-  int derived_value = 0x5678;
-};
-
-int main() {
-  CDerived* derived = new CDerived();
-  delete derived;
-  derived = nullptr;
   return 0;
 }
