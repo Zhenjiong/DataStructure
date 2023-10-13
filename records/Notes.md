@@ -218,6 +218,10 @@ catch(std::bad_alloc)
 
 #### static限定符
 
+#### decltype
+
+返回数据类型，不实际计算表达式的值
+
 #### 内存
 
 <div align=center>

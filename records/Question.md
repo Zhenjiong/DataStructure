@@ -48,10 +48,88 @@ TODO
 
 #### 左值与右值
 
+C++中将表达式分为左值和右值。一个左值表达式表示对象的身份(在内存中的位置)，一个右值表达式表示对象的值(内容)
 
+左值表达式是不可移动的，而右值表达式是可以移动的
+
+左值: 
+变量、函数、模板形参对象或数据成员的名字(std::cin);
+返回类型为左值引用的函数调用;
+++a/--a;
+*ptr、取下标;
+
+右值: 
+取地址表达式 &a ;
+this指针;
+lambda表达式;
+字面量;
+各种数值运算表达式;
+a++/a--;
+
+<div align=center>
+<img src="../media/lvalue_rvalue.jpg"  />
+</div>
+
+prvalue没有内存实体，取不到地址
+
+xvalue 和 lvalue都有内存实体，但是生命周期不同。左值持久，右值短暂
 
 #### 左值引用和右值引用
 
+为了实现移动语义而引入了右值引用。
+
+顾名思义，左值引用是绑定到左值的引用，右值引用是绑定到右值的引用。
+
+左值引用无法绑定到一个右值上，不过const的引用可以
+
+右值引用只能绑定到右值上，不过右值引用的表达式既可以是右值，也可以是左值
+
+```c++
+void foo(int &)  { std::cout << "lvalue" << std::endl; }
+void foo(int &&) { std::cout << "rvalue" << std::endl; }
+
+int main() {
+  int &&rref = 1;
+  foo(rref);    // output: lvalue
+}
+
+// https://www.zhihu.com/question/363686723/answer/1976488046
+```
+
+此外还可以使用转发引用实现std::forward()
+
+```c++
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+void PrintV(int &t) {
+  cout << "lvalue" << endl;
+}
+
+void PrintV(int &&t) {
+  cout << "rvalue" << endl;
+}
+
+template<typename T>
+void Test(T &&t) {
+  PrintV(t);
+  PrintV(std::forward<T>(t));
+
+  PrintV(std::move(t));
+}
+
+int main() {
+  Test(1); // lvalue rvalue rvalue
+  int a = 1;
+  Test(a); // lvalue lvalue rvalue
+  Test(std::forward<int>(a)); // lvalue rvalue rvalue
+  Test(std::forward<int&>(a)); // lvalue lvalue rvalue
+  Test(std::forward<int&&>(a)); // lvalue rvalue rvalue
+  return 0;
+}
+```
 
 #### struct 与 class
 
