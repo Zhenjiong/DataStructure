@@ -1,48 +1,32 @@
 #include <iostream>
+#include <utility>
+#include <memory>
 #include <string>
 
 using namespace std;
 
-void PrintV(int &t) {
-  cout << "lvalue" << endl;
-}
-
-void PrintV(int &&t) {
-  cout << "rvalue" << endl;
-}
-
-template<typename T>
-void Test(T &&t) {
-  PrintV(t);
-  PrintV(std::forward<T>(t));
-
-  PrintV(std::move(t));
-}
-
 struct A {
-  int b;
-  int &a;
-
-  A (int _a, int _b)
-    : b(_b), a(_a) {}
-
+  int a;
+  char b;
+  string s;
+  // int c;
+  // int d;
+  // double e = 0.0;
 };
 
+
 int main() {
-  Test(1); // lvalue rvalue rvalue
-  int a = 1;
-  Test(a); // lvalue lvalue rvalue
-  Test(std::forward<int>(a)); // lvalue rvalue rvalue
-  Test(std::forward<int&>(a)); // lvalue lvalue rvalue
-  Test(std::forward<int&&>(a)); // lvalue rvalue rvalue
+  int a[3] = {1,2,3};
+  cout << sizeof(A) << endl;
+  cout << sizeof(a) << endl;
+  cout << &a << endl;
+  cout << &(a + 1) << endl;
 
-  int x = 20;
-  int y = x & (-x);
-  std::cout << y << std::endl;
-
-  A(21, 12);
-  int k = 10;
-  int &&pp = 20;
-  std::cout << std::is_rvalue_reference_v<decltype(pp)> << std::endl;
+  // A aa{10, 's', 20, 8};
+  // A *p = &aa;
+  // A &r = aa;
+  // shared_ptr<A> sp(new A {10, 's', 20, 8});
+  // weak_ptr<A> wp(sp);
+  // cout << sizeof(wp) << " " << sizeof(sp) << " " << sizeof(p) << " " << sizeof(r) << endl;
   return 0;
 }
