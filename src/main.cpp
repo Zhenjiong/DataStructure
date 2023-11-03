@@ -1,18 +1,24 @@
 #include <iostream>
+#include <vector>
 #include <string>
-#include <memory>
+#include <queue>
+
+
 using namespace std;
 
-int main() {
-  shared_ptr<int> sp = make_shared<int>(100);
-  weak_ptr<int> wp(sp);
+int main () {
+  // int n;
+  // cin >> n;
+  // string s;
+  // cin >> s;
 
-  if (!wp.expired()) {
-    auto temp = wp.lock();
-    cout << *temp << endl;
-    cout << sp.use_count() << endl;
-  }
-  cout << sp.use_count() << endl;
+  int n = 2;
+  string s = "1:0,0:1";
+
+  vector<vector<int> > path(n);
+  vector<int> inDegree(n, 0);
+
   
+
   return 0;
 }
