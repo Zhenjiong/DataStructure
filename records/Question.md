@@ -410,6 +410,24 @@ int main () {
 }
 ```
 
+### 冒泡排序
+
+一轮一轮得两两交换排序，每一轮都把一个最大值放到右侧，最右侧的值便排好了，下一轮不用再排序
+
+```c++
+void bubbleSort(vector<int> &nums) {
+  for (int i = 0; i < nums.size() - 1; ++i) {
+    // j + 1 < nums.size() - i
+    // first loop : i = 0  , j+1 < n
+    // last  loop : i = n-1, j+1 < 1
+    for (int j = 0; j < nums.size() - i - 1; ++j) {
+      if (nums[j] > nums[j+1])
+        std::swap(nums[j], nums[j+1]);
+    }
+  }
+}
+```
+
 ### 归并排序
 
 148 leetcode 排序链表
