@@ -205,7 +205,13 @@ TODO
 #### 访问控制: public private protected
 
 
+#### 关联容器set map
 
+无序容器的关键字需要定义==, 以及哈希值计算函数
+
+有序容器的关键字需要定义<
+
+[Example](#set-mystruct)
 
 ### 操作系统
 
@@ -1002,4 +1008,50 @@ int main() {
   derived = nullptr;
   return 0;
 }
+```
+
+### set myStruct
+
+```c++
+#include <iostream>
+#include <string>
+#include <unordered_set>
+#include <set>
+#include <functional>  // basic hash template, such as hash<int>
+
+struct Point {
+  int x;
+  int y;
+};
+
+bool operator==(const Point& lhs, const Point& rhs) {
+  return lhs.x == rhs.x && lhs.y == rhs.y;
+}
+
+bool operator!=(const Point& lhs, const Point& rhs) {
+  return !(lhs == rhs);
+}
+
+bool operator<(const Point& lhs, const Point& rhs) {
+  return lhs.x < rhs.x && lhs.y < rhs.y;
+}
+
+size_t myHasher(const Point& p) {
+  // first () is constructor, second (p.x) is function to calcu hash
+  return std::hash<int>()(p.x);
+}
+
+int main() {
+
+  std::string s = "Hello!";
+  String ms(s.c_str());
+  std::unordered_set<Point, decltype(myHasher)*> ss;
+  std::set<Point> trs;
+  trs.insert(Point{1,2});
+  trs.insert(Point{3,4});
+  for (auto t : trs)
+    std::cout << t.x << " " << t.y << std::endl;
+  return 0;
+}
+
 ```
