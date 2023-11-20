@@ -393,6 +393,11 @@ TODO
 结果为两组((1,3),(2,4))
 
 
+一个集合，其和为5的倍数
+找出最小子集，其和仍然是5的倍数。
+[Answer](#20231114-exam-1st)
+
+
 ## Practice
 
 ### 快速排序
@@ -939,6 +944,62 @@ void Solution::dfs(int x, int y) {
 }
 ```
 
+### 20231114 exam 1st
+
+
+```c++
+// TODO
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+
+class Solution {
+ public:
+  Solution(std::vector<int>& _input, int _k)
+    : k(_k), data(_input), indexs(k), nums() {
+    for (int i = 0; i < data.size(); ++i) {
+      int mod = data[i] % k;
+      ++nums[mod];
+      indexs[mod].push_back(i);
+    }
+
+
+  }
+
+  bool split_intnum(int mod, int i, std::unordered_map<int, int> res);
+
+  int k;
+  std::vector<int> data;
+  std::vector<std::vector<int> > indexs;
+  std::unordered_map<int, int> nums;
+};
+
+int main() {
+  
+  std::vector<int> data = {1, 2, 3, 4};
+  int k = 5;
+
+  Solution s(data, k);
+
+  return 0;
+}
+
+bool Solution::split_intnum(int mod, int i, std::unordered_map<int, int> res) {
+  if (i == 1) {
+    if (nums[mod] - res[mod] > 0) {
+      ++res[mod];
+      return true;
+    }
+    else
+      return false;
+  }
+
+  if (i > 1) {
+
+  }
+}
+```
 
 ### 继承中调用构造和析构的顺序
 
