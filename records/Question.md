@@ -436,6 +436,14 @@ const是定义了个变量放内存中, 有数据类型, 本身是变量, 值不
 
 回调函数实现原理，功能
 
+## 商汤一面20231128
+
+实现MemCopy(void *dst, const void *src, size_t len)
+
+如果想加快拷贝, 怎么做?
+
+TODO
+
 ## Practice
 
 ### 快速排序
