@@ -689,7 +689,49 @@ leetcode 215 数组中第K个最大的元素
 
 建堆和删除都需要一个从上向下的调整的函数, 插入需要从下向上起泡.
 
+```c++
+int findKthLargest(vector<int>& nums, int k) {
+  // maxHeap
+  // ---------------------------------------
+  buildHeap(nums);
+  int heapSize = nums.size();
+  for (int j = 0; j < k; ++j) {
+    deleteTop(nums, heapSize);
+    --heapSize;
+  }
+  return nums[nums.size()-k];
+}
 
+void maxHeap(vector<int>& arr, int index, int heapSize) {
+  int value = arr[index];
+  int child = index * 2 + 1;
+  while (child < heapSize) {
+    // child is the bigger one child
+    if (child + 1 < heapSize && arr[child] < arr[child+1])
+      ++child;
+    if (value >= arr[child])
+      break;
+    else {
+      arr[(child-1) / 2] = arr[child];
+      child = child * 2 + 1;
+    }
+  }
+  arr[(child-1) / 2] = value;
+}
+
+void buildHeap(vector<int>& arr) {
+  int heapSize = arr.size();
+  for (int i = (heapSize-1) / 2; i>=0; --i) {
+    maxHeap(arr, i, heapSize);
+  }
+}
+
+void deleteTop(vector<int>& arr, int heapSize) {
+  swap(arr[0], arr[heapSize-1]);
+  --heapSize;
+  maxHeap(arr, 0, heapSize);
+}
+```
 
 ### 二分查找
 
