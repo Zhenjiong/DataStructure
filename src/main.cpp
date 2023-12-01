@@ -1,20 +1,25 @@
 #include <iostream>
 
-union U1 {
-  int x;
-  float y;
-  char *ch;
-};
+struct A {
 
-union U2 {
-  int x;
-  float y;
+  A() = default;
+
+  A(char *input) : ch(input) {
+    if (*ch == 'a')
+      throw std::runtime_error("aaaa");
+    std::cout << "construct A! " << std::endl;
+  }
+
+  ~A() {
+    std::cout << "destroy A! " << std::endl;
+  }
+
+  char *ch = nullptr;  
 };
 
 int main() {
 
-  std::cout << sizeof(U1) << std::endl;
-  std::cout << sizeof(U2) << std::endl;
-  
+  char *in = "asdf";
+  A(in);  
   return 0;
 }
