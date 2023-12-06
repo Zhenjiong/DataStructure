@@ -208,6 +208,38 @@ struct D1 : Base {};  // 默认public继承
 class D2 : Base {};   // 默认private继承
 ```
 
+#### 传值 传引用 传参数 拷贝问题
+
+```c++
+#include <iostream>
+
+void getMemory(int *p) {
+  p = new int();
+  return;
+}
+
+int main() {
+  int* p = nullptr;
+  getMemory(p);
+  *p = 10;
+  std::cout << "p: " << *p << std::endl;
+  return 0;
+}
+```
+
+传值(passed by value), 传引用(passed by reference)
+
+传值会发生拷贝，实参和形参是两个不同的对象
+
+指针形参，由于可以通过指针间接访问对象，因而有些不同，但需记住这是两个指针.
+
+```c++
+void reset(int *ip) {
+  *ip = 0;  // 改变指针ip所指对象的值
+  ip = 0;   // 只改变了ip的局部拷贝，实参未被改变
+}
+```
+
 #### OOP:多态和继承
 
 继承，通过已有类定义新类，实现软件复用
@@ -510,6 +542,18 @@ realloc的实现
 野指针是啥，怎么处理，如何避免; 空指针
 
 TODO
+
+## 零束汽车一面20231206
+
+传参问题
+
+设计模式
+
+链表倒序
+
+进程与线程，线程同步的方法，进程间通信的方法
+
+inline, 实现inline类似的功能(#define), 他们的区别
 
 ## Practice
 
