@@ -1,16 +1,13 @@
 #include <iostream>
+#include <string>
+#include <climits>
 
-void getMemory(int *p) {
-  // p = new int();
-  *p = 30;
-  return;
-}
+
 
 int main() {
-  int a = 20;
-  int* p = &a;
-  getMemory(p);
-  // *p = 10;
-  std::cout << "p: " << *p << std::endl;
+  std::string s("asda");
+  s.erase(1);
+  std::cout << s.find('a');
+  std::cout << '\n' << s;
   return 0;
 }
