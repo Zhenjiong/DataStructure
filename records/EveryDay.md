@@ -49,6 +49,23 @@ unite的优化: 按秩合并——按树的高度或者树的重量
 
 find的优化: 路径紧缩(path compaction)、路径分隔(path splitting)、路径对折(path halving). 优化的find会改变树的高度，需注意
 
+复杂度分析:
+
+定义爆炸增长的Ackermann函数$A(i,j)$和其倒数$\alpha(p,q)$: 
+
+$A(i,j)=\left\{\begin{matrix}
+2^j     \quad  \quad \quad \quad  i=2 \ and \ j\geqslant 1\\
+A(i-1,2) \quad \quad i\geqslant 2 \ and \ j=1 \\
+A(i-1,A(i,j-1)) \quad i,j\geqslant 2\\
+\end{matrix}\right.$
+
+$\alpha(p,q)=min\{z\geqslant1|A(z,\left \lfloor p/q \right \rfloor)>log_2q\},p\geqslant q \geqslant 1$
+
+$\alpha(p,q)$增长缓慢，一般的应用中可以假设$\alpha(p,q) \leqslant 4$
+
+并查集的时间复杂度为$\alpha(p,q)$, q是集合的元素个数, p是查找次数和元素个数的和.
+
+
 例子: 
 
 ```c++
@@ -100,6 +117,40 @@ struct DisjointSet {
 该题可以采用深度遍历或者广度遍历解决，在复杂度上更有优势. 并查集方法亦可解决, 以此为例使用并查集.
 
 [Answer](#leetcode-547)
+
+#### LeetCode 1631 最小体力消耗路径
+
+你准备参加一场远足活动。给你一个二维 rows x columns 的地图 heights ，其中 heights[row][col] 表示格子 (row, col) 的高度。一开始你在最左上角的格子 (0, 0) ，且你希望去最右下角的格子 (rows-1, columns-1) （注意下标从 0 开始编号）。你每次可以往 上，下，左，右 四个方向之一移动，你想要找到耗费 体力 最小的一条路径。
+
+一条路径耗费的 体力值 是路径上相邻格子之间 高度差绝对值 的 最大值 决定的。
+
+请你返回从左上角走到右下角的最小 体力消耗值 。
+
+输入：heights = [ [1,2,2], [3,8,2], [5,3,5] ]
+输出：2
+解释：路径 [1,3,5,3,5] 连续格子的差值绝对值最大为 2 。
+这条路径比路径 [1,2,2,2,5] 更优，因为另一条路径差值最大值为 3 。
+
+解法: 
+
+我们可以将本题抽象成如下的一个图论模型：
+
+我们将地图中的每一个格子看成图中的一个节点；
+
+我么将两个相邻（左右相邻或者上下相邻）的两个格子对应的节点之间连接一条无向边，边的权值为这两个格子的高度差的绝对值；
+
+我们需要找到一条从左上角到右下角的最短路径，其中一条路径的长度定义为其经过的所有边权的最大值。
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/path-with-minimum-effort/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+此处暂时介绍并查集方法
+TODO
+
+[Answer](#leetcode-1631)
+
 
 ## Answers
 
@@ -268,4 +319,84 @@ public:
     }
     return res;
   }
+```
+
+#### LeetCode 1631
+
+并查集方法解决:
+
+```c++
+struct Edge {
+  int l;
+  int r;
+};
+
+struct DisjointSet {
+  vector<int> parent;
+  vector<int> rank;
+  int setCount;
+
+  DisjointSet(int n)
+    : parent(n), rank(n, 1), setCount(n) {
+    for (int i = 0; i < n; ++i)
+      parent[i] = i;
+  }
+
+  int findSet(int x) {
+    return parent[x] == x ? x : (parent[x] = findSet(parent[x]));
+  }
+
+  void unite(int a, int b) {
+    int x = findSet(a);
+    int y = findSet(b);
+    if (x == y) return;
+    if (rank[x] <= rank[y]) {
+      parent[x] = y;
+      rank[y] += rank[x];
+    }
+    else {
+      parent[y] = x;
+      rank[x] += rank[y];
+    }
+    --setCount;
+  }
+
+  bool isSameSet(int x, int y) {
+    return findSet(x) == findSet(y);
+  }
+
+};
+
+class Solution {
+public:
+  int minimumEffortPath(vector<vector<int>>& heights) {
+    int m = heights.size();
+    int n = heights[0].size();
+    if (m == 1 && n == 1) return 0;
+
+    multimap<int, Edge> edges;
+    for (int i = 0; i < m; ++i) {
+      for (int j = 0; j < n; ++j) {
+        int id = i * n + j;
+        if (i < m-1) {
+          int value = abs(heights[i][j] - heights[i+1][j]);
+          edges.insert(pair<int, Edge>(value, Edge{id, id + n}));
+        }
+        if (j < n-1) {
+          int value = abs(heights[i][j] - heights[i][j+1]);
+          edges.insert(pair<int, Edge>(value, Edge{id, id + 1}));
+        }
+      }
+    }
+    
+    DisjointSet s(m*n);
+    for (auto e : edges) {
+      s.unite(e.second.l, e.second.r);
+      if (s.isSameSet(0, m*n-1))
+        return e.first;
+    }
+    return edges.rbegin()->first;
+  }
+
+};
 ```
